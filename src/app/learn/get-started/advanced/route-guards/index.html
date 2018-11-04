@@ -1,0 +1,135 @@
+<stache
+  pageTitle="Route Guards"
+  showTableofContents="true"
+  navTitle="Route guards">
+
+  <p>
+    Support entire Angular feature of route guards. Route guards support CanActivate and CanActivateChild.
+  </p>
+  <p>
+    You can have provide an `index.guard.ts` with any index.html file in the SPA. The file exports a class that is the guard. At that point, it’s pure Angurlar being exporte.d .  Fro the entire site, put it at the root level srs/app/index.guard.ts. in that sennario, it runs before the index.html is rendered and before the ominbar and everything else. (If it’s just for a child index.html, the site still loads around the page, but the pag doesn’t
+  </p>
+  <p>
+    Route guards are hierarcichal. If you hwave one at root and lower, it runs both of them. So the root level is something like permission to view the entire SPA, wihle the lower one is to see a particular page. So both have to be true.
+  </p>
+  <p>
+    2 interfaces: CanACtivate and CanActivateChild. One is access to the index.html. The other to the children of it. … We wired up the other Angular interface options, but these are the only 2 that we are currently using.
+  </p>
+
+  <br>
+
+  <p>
+    To implement a route guard you place an index.guard.ts file in the same folder as the index.html where you want the guard to be applied. Everything else in that file is pretty much what you’d see in the Angular docs.
+  </p>
+  <p>
+    you can put a route guard “index.guard.ts” file alongside each of your “index.html” to guard the route at that path
+  </p>
+  <p>
+    NOTE: Suggestion to reference route guards form the create-a-page tutorial and/or the naming-and-placement reference topic.
+  </p>
+
+  <br>
+
+  <p>
+    In short, you need to provide an `index.guard.ts` file in your `src/app` directory.  This file contains a class to implement `CanActivate`. It is called whenever someone accesses any route in your spa.
+  </p>
+  <p>
+    If you need more control at a specific route, you can place an `index.guard.ts` file in the directory that contains the route’s `index.html` file.
+  </p>
+  <p>
+    NOTE:	The only existing docs that (kinda) mention `index.guard.ts` are in the Pod Lookup Library where they provide an example usage: https://host.nxt.blackbaud.com/authorization-docs/learn/pod-lookup/pod-lookup-lib#usage-with-route-guards.
+  </p>
+  <p>
+    Route guards can be nested.
+  </p>
+  <p>
+    The SKY UX team baked routing into Builder, so all you do to create a route is add a directory under `src/app` and include an `index.html` file in that directory. Builder turns that into a route. <strong>Route guards work in `easy` routing mode. (Not `advanced`, I think. Maybe because `advanced` decouples routing.)</strong> Just name your guard file `index.guard.ts` and it’ll be applied to the page in that folder.
+  </p>
+
+  <br>
+
+  <p>
+    implemented a top-level route that makes it very simple to declare an index.guard.ts next to src/app/index.html and have a guard that affects being able to load anything within the SPA. This should be the preferred method for locking down SPAs in future.
+  </p>
+
+  <br>
+
+  <ol>
+    <li>
+      <p>
+        1.	Create index.guard.ts beside index.html
+      </p>
+    </li>
+    <li>
+      <p>
+        Within that file...
+      </p>
+      <stache-code-block languageType="typescript">
+import {
+  CanActivateChild,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot
+} from '@angular/router';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+
+@Injectable()
+export class AppRouteGuard implements CanActivateChild {
+  constructor(private router: Router,
+    private permissionsDataAccessService: PermissionsDataAccessService ) { }
+  public canActivateChild(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean> | Promise<boolean> | boolean {
+    if (state.url.startsWith('/error') || state.url.startsWith('/confirm-invite')) {
+      return true;
+    }
+  }
+}
+</stache-code-block>
+    </li>
+    <li>
+      <p>
+        xxx.
+      </p>
+      <stache-code-block languageType="typescript">
+xxx
+      </stache-code-block>
+    </li>
+    <li>
+      <p>
+        xxxx
+      </p>
+      <stache-code-block languageType="typescript">
+xxx
+      </stache-code-block>
+    </li>
+    <li>
+      <p>
+        xxx
+      </p>
+    </li>
+    <li>
+      <p>
+        xxx.
+      </p>
+      <stache-code-block languageType="typescript">
+xxx
+      </stache-code-block>
+    </li>
+    <li>
+      <p>
+        xxx
+      </p>
+      <stache-code-block>
+xxx
+      <stache-code-block>
+    </li>
+    <li>
+      <p>
+        xxx
+      </p>
+    </li>
+  </ol>
+
+</stache>

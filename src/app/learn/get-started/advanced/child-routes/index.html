@@ -1,0 +1,41 @@
+<stache
+  pageTitle="Child Routing"
+  showTableofContents="true"
+  navTitle="Child routing">
+
+  <p>
+    Child routing enables you to extend the path of the parent route and use a modular, multi-view design to display content from child routes within the parent.
+  </p>
+  <p>
+    Child routes extend the path of the parent route.
+  </p>
+  <br>
+  <p>
+    Child routing enable you to provide a modular, multi-view design to display the content from child routes within their parent page instead of within a separate pages for each child route.
+  </p>
+  <p>
+    Child routes extend the path of the parent route.
+  </p>
+  <br>
+  <p>
+    Child routes supports use cases for grantmaking. … Uses an angular feature we don’t use elsewhere. Like an iframe but not … Renders child in the parent. Never change. Never get reloaded. Prime use is tab controls Loading content on each tab separately. Paul originally didn’t want it. (In SKY UX 1, tab control dealt with this. In SKY UX 2, it doesn’t)
+  </p>
+  <p>
+    It’s simply embedding a <router-outlet> tag in the parent index.html. And then use the # at the start of the folder name ofr the child folders.
+  </p>
+  <br>
+  <p>
+    A directory prefixed with # such as src/app/about/#child would create a child-route underneath /about which can be affected by canActivateChild guards as well as used by controls that implement router-outlet in their template such as the future tab control (or currently microedge contrib tab control).
+  </p>
+  <p>
+    A directory without the prefix but underneath a child route such as src/app/about/#child/top-level will break out and become a top level route that cannot be affected by canActivateChild guards and will not participate in router-outlet.
+  </p>
+  <p>
+    All other routes will continue to be top-level. Routes continue to only be created if an index.html is provided.
+  </p>
+
+  <stache-code-block>
+    xxx
+  </stache-code-block>
+
+</stache>
