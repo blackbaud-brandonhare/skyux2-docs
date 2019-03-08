@@ -1,0 +1,177 @@
+<stache
+  pageTitle="Upgrade Node and NVM for Windows"
+  showTableOfContents="true">
+
+  <stache-page-summary>
+    <p>
+      Note: You'll be tied to using Node: 10.15.1 / NPM 6.4.1 locally.  When Node is under NVM control, you can't upgrade NPM separately.  I actually went back to just re-install node because I want control over the NPM version and want my build environment to mimic the CI/CD pipeline
+    </p>
+  </stache-page-summary>
+
+  <stache-page-anchor>
+    Upgrading to Node 10.15.1 and npm 6.4.1 on Windows
+  </stache-page-anchor>
+
+  <ol>
+    <li>
+      *Close* Visual Studio 2017, Visual Studio Code, and anything else that uses node for a runtime, compilation, script execution, etc.
+    </li>
+    <li>
+      *Download* https://nodejs.org/dist/v10.15.1/node-v10.15.1-x64.msi
+    </li>
+    <li>
+      *Install* with typical Next > Next > Finish (I used defaults)
+    </li>
+    <li>
+      *Reboot* machine
+    </li>
+    <li>
+      *Open PowerShell as Administrator* and type `npm -v` and `node -v`, you should get `6.4.1` and `v10.15.1` respectively. _Make sure you verify you're on these versions before proceeding._
+    </li>
+    <li>
+      In the same Terminal, *run the following command*: `npm install --global --production windows-build-tools`
+    </li>
+    <li>
+      *Reboot* machine again
+    </li>
+    <li>
+      *Run* `rimraf node_modules` and then `npm install` again on any projects you haven't yet. When finished, you may notice a warning about vulnerabilities.  This is expected.
+    </li>
+  </ol>
+
+
+
+  <stache-page-anchor>
+    Upgrading to npm 6.5.0 on Windows to match Build Pipeline (_AFTER updating to Node 10.15.1_)
+  </stache-page-anchor>
+
+  <ol>
+    <li>
+      *Open PowerShell as Administrator*
+    </li>
+    <li>
+      *Run*: `Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force`
+    </li>
+    <li>
+      *Run*: `npm install --global --production npm-windows-upgrade`
+    </li>
+    <li>
+      *Run*: `npm-windows-upgrade --npm-version 6.5.0`
+    </li>
+    <li>
+      *Reboot* machine again
+    </li>
+    <li>
+      *Open PowerShell as Administrator* and type `npm -v` and `node -v`, you should get `6.5.0` and `v10.15.1` respectively.
+    </li>
+  </ol>
+
+  
+*Note:* If you install and use the windows-build tools, then it is possible that you may recieve an error similar to this:
+```C:\Users\some.user\Documents\Git\skyux-spa-emily-test-docs\node_modules\node-sass\build\src\libsass.vcxproj(21,3):
+error MSB4019: The imported project "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\VC\VCTargets\Microsoft.Cpp.Default.props" was not found. Confirm that the path in the <Import> declaration is correct, and that the file exists on disk.```
+
+The source of this error is that you may have an older version of Visual Studio in your PATH.  The `windows-build-tools` (or the VS 2019) path values need to be before listed the any existing Visual Studio paths.  Please refer to https://blackbaud.slack.com/archives/C3TQ4C0KG/p1549488781640300?thread_ts=1549479644.622700&cid=C3TQ4C0KG for more information
+
+
+  <stache-page-anchor>
+    Upgrading to Node 10.15.1 Using NVM for Windows
+  </stache-page-anchor>
+
+  *Prerequisites*
+    • 7-Zip
+    • Create a list of all globally installed NPM packages.  (`npm list -g --depth=0`)
+
+*_Warning!_*  If you have node installed, then all globally installed NPM packages will no longer be referenced unless you place that version of Node under NVM control (see below).  (i.e., the global packages located in C:\Users\your_user_name>\AppData\Roaming\npm\node_modules)
+
+For all new versions of Node under NVM control, then they will need to be re-installed.  The node_modules in this original directory is not removed and if you re-install Node.js in conjunction with NVM-managed-Node (not recommended), then it will continue to reference this folder.
+
+If you do place a version of node under NVM control that references the global packages, and you uninstall that version of node and/or uninstall NVM, then it will also clean up the node_modules associated with that version of Node (edited) 
+*Steps*
+
+  <ol>
+    <li>
+      Navigate to https://github.com/coreybutler/nvm-windows/releases and download `nvm-setup.zip`.  (`nvm-noinstall.zip` is used for a manual installation. See the https://github.com/coreybutler/nvm-windows/wiki for additional instructions.)
+    </li>
+    <li>
+      Extract `nvm-setup` from the Zip file
+    </li>
+    <li>
+      Launch `nvm-setup.exe`
+      <ol>
+        <li>
+          Accept the License Agreement, then click *Next*
+        </li>
+        <li>
+          Set the destination location.  NVM will try to install to a destination location of `C:\Users\<your_user_name>\AppData\Roaming\nvm` by default.  This will most likely fail with the error "An error occurred while trying to rename a file in the destination directory code.  MoveFile failed; code 5".  This means that the installation program does not have rights to rename a file in that folder.  *Use the location `C:\nvm`.*  Click *Next*.
+        </li>
+        <li>
+          Set the Node.js Symlink.  This should be `C:\program files\nodejs`.  If this folder exists NVM will try to overwrite what is already there.  Click *Next*.
+        </li>
+        <li>
+          Click *Install*.  If you have a version of node installed, then you will be prompted to allow NVM to control that version of Node.
+        </li>
+        <li>
+          Click *Finish*
+        </li>
+      </ol>
+    </li>
+    <li>
+      *Restart your system* to ensure that the new environment variables take effect
+    </li>
+    <li>
+      *Open PowerShell as Administrator*.  At this point you may not have node installed
+    </li>
+    <li>
+      *Check environment variables.*  (`Get-ChildItem Env:` in Powershell)
+      <li>
+        User environment variables should have `NVM_HOME` and `NVM_SYMLINK`
+      </li>
+      <li>
+        User PATH environment variable should list `%NVM_HOME%` and `%NVM_SYMLINK%` (examine via `$Env:Path` in Powershell)
+      </li>
+    </li>
+    <li>
+      *Type `nvm`*.  This will dump the NVM help if it installed properly
+    </li>
+    <li>
+      *Type `nvm list`* to list all versions of Node under NVM control.  An asterisk (*) will be next to the currently used version of node.  *_To add/upgrade Node.js 10.15.1 and place it under NVM control, you will need to do the following:_*
+      <ol>
+        <li>
+          *Type `nvm install` 10.15.1*
+        </li>
+        <li>
+          *Type `nvm use 10.15.1`* (*Important!*  If you don't do this then you won't be using Node 10.15.1)
+        </li>
+      </ol>
+    </li>
+    <li>
+      *Confirm the node version* by typing `node -v.`  It should return `10.15.1`
+    </li>
+    <li>
+      *Confirm the NPM version* by typing `npm -v`.  It should return `6.4.1`
+    </li>
+    <li>
+      *Determine if you have your globally installed NPM packages* (`npm list -g --depth=0`), and that your paths are set correctly (You can confirm this by just typing `skyux` and getting the help) .  At this point you may have no global NPM packages installed you will have to reinstall the ones that you use from the list you created as part of the pre-requisites.
+    </li>
+    <li>
+      If the location of the `node_modules` for the global packages has changed, the *you may need to re-generate your `.npmrc`*
+    </li>
+    <li>
+      (https://docs.blackbaud.com/engineering-system-docs/learn/dev-setup-engsys/vsts-npm-feed)
+    </li>
+    <li>
+      In the same Terminal, *run the following command*: `npm install --global --production windows-build-tools`
+    </li>
+   <li>
+      *Reboot* machine again
+    </li>
+   <li>
+      *Run* `rimraf node_modules` and then `npm install` again on any projects you haven't yet. When finished, you may notice a warning about vulnerabilities.  This is expected.
+    </li>
+   </ol>
+
+*Note:* You will not be able to upgrade the NPM version by using the npm-windows-upgrade package when Node.js is under NVM control.  NVM upgrades NPM when Node is upgaded, so the versions are tied together.
+
+
+</stache>
