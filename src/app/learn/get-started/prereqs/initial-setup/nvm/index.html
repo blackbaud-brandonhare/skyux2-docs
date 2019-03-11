@@ -9,86 +9,29 @@
   </stache-page-summary>
 
   <stache-page-anchor>
-    Upgrading to Node 10.15.1 and npm 6.4.1 on Windows
-  </stache-page-anchor>
-
-  <ol>
-    <li>
-      *Close* Visual Studio 2017, Visual Studio Code, and anything else that uses node for a runtime, compilation, script execution, etc.
-    </li>
-    <li>
-      *Download* https://nodejs.org/dist/v10.15.1/node-v10.15.1-x64.msi
-    </li>
-    <li>
-      *Install* with typical Next > Next > Finish (I used defaults)
-    </li>
-    <li>
-      *Reboot* machine
-    </li>
-    <li>
-      *Open PowerShell as Administrator* and type `npm -v` and `node -v`, you should get `6.4.1` and `v10.15.1` respectively. _Make sure you verify you're on these versions before proceeding._
-    </li>
-    <li>
-      In the same Terminal, *run the following command*: `npm install --global --production windows-build-tools`
-    </li>
-    <li>
-      *Reboot* machine again
-    </li>
-    <li>
-      *Run* `rimraf node_modules` and then `npm install` again on any projects you haven't yet. When finished, you may notice a warning about vulnerabilities.  This is expected.
-    </li>
-  </ol>
-
-
-
-  <stache-page-anchor>
-    Upgrading to npm 6.5.0 on Windows to match Build Pipeline (_AFTER updating to Node 10.15.1_)
-  </stache-page-anchor>
-
-  <ol>
-    <li>
-      *Open PowerShell as Administrator*
-    </li>
-    <li>
-      *Run*: `Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force`
-    </li>
-    <li>
-      *Run*: `npm install --global --production npm-windows-upgrade`
-    </li>
-    <li>
-      *Run*: `npm-windows-upgrade --npm-version 6.5.0`
-    </li>
-    <li>
-      *Reboot* machine again
-    </li>
-    <li>
-      *Open PowerShell as Administrator* and type `npm -v` and `node -v`, you should get `6.5.0` and `v10.15.1` respectively.
-    </li>
-  </ol>
-
-  
-*Note:* If you install and use the windows-build tools, then it is possible that you may recieve an error similar to this:
-```C:\Users\some.user\Documents\Git\skyux-spa-emily-test-docs\node_modules\node-sass\build\src\libsass.vcxproj(21,3):
-error MSB4019: The imported project "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\VC\VCTargets\Microsoft.Cpp.Default.props" was not found. Confirm that the path in the <Import> declaration is correct, and that the file exists on disk.```
-
-The source of this error is that you may have an older version of Visual Studio in your PATH.  The `windows-build-tools` (or the VS 2019) path values need to be before listed the any existing Visual Studio paths.  Please refer to https://blackbaud.slack.com/archives/C3TQ4C0KG/p1549488781640300?thread_ts=1549479644.622700&cid=C3TQ4C0KG for more information
-
-
-  <stache-page-anchor>
     Upgrading to Node 10.15.1 Using NVM for Windows
   </stache-page-anchor>
 
-  *Prerequisites*
-    • 7-Zip
-    • Create a list of all globally installed NPM packages.  (`npm list -g --depth=0`)
-
-*_Warning!_*  If you have node installed, then all globally installed NPM packages will no longer be referenced unless you place that version of Node under NVM control (see below).  (i.e., the global packages located in C:\Users\your_user_name>\AppData\Roaming\npm\node_modules)
-
-For all new versions of Node under NVM control, then they will need to be re-installed.  The node_modules in this original directory is not removed and if you re-install Node.js in conjunction with NVM-managed-Node (not recommended), then it will continue to reference this folder.
-
-If you do place a version of node under NVM control that references the global packages, and you uninstall that version of node and/or uninstall NVM, then it will also clean up the node_modules associated with that version of Node (edited) 
-*Steps*
-
+  <p>
+    Prerequisites:
+  </p>
+  <ol>
+    <li>
+      7-Zip
+    </li>
+    <li>
+      Create a list of all globally installed NPM packages. (<stache-code>npm list -g --depth=0</stache-code>)
+    </li>
+  </ol>
+  <sky-alert alertType="warning">
+    If you have node installed, then all globally installed NPM packages will no longer be referenced unless you place that version of Node under NVM control (see below). (i.e., the global packages located in C:\Users\your_user_name>\AppData\Roaming\npm\node_modules)
+  </sky-alert>
+  <p>
+    For all new versions of Node under NVM control, then they will need to be re-installed.  The node_modules in this original directory is not removed and if you re-install Node.js in conjunction with NVM-managed-Node (not recommended), then it will continue to reference this folder.
+  </p>
+  <p>
+    If you do place a version of node under NVM control that references the global packages, and you uninstall that version of node and/or uninstall NVM, then it will also clean up the node_modules associated with that version of Node (edited)
+  </p>
   <ol>
     <li>
       Navigate to https://github.com/coreybutler/nvm-windows/releases and download `nvm-setup.zip`.  (`nvm-noinstall.zip` is used for a manual installation. See the https://github.com/coreybutler/nvm-windows/wiki for additional instructions.)
