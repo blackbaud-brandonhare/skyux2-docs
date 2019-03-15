@@ -1,120 +1,131 @@
 <stache
-  pageTitle="Upgrade Node and NVM for Windows"
+  pageTitle="Install and Manage Node.js"
+  navTitle="Install and manage Node.js"
   showTableOfContents="true">
 
   <stache-page-summary>
     <p>
-      Note: You'll be tied to using Node: 10.15.1 / NPM 6.4.1 locally.  When Node is under NVM control, you can't upgrade NPM separately.  I actually went back to just re-install node because I want control over the NPM version and want my build environment to mimic the CI/CD pipeline
+      SKY UX requires version 6 or later of Node.js, and we recommend <a href="https://nodejs.org/en/download/releases/">the latest LTS release</a>. To check your version, run <stache-code>node –v</stache-code> from the command line.
+    </p>
+    <p>
+      We also recommend Node Version Manager (nvm) to wrap your Node.js installation so that it installs in your user directory and avoids permissions-related issues.
+    </p>
+    <p>
+      For Mac OS X and Linux, follow <a href="https://github.com/creationix/nvm#installation-and-update">the installation and update instructions</a> in the <stache-code>README.md</stache-code> file for the Node Version Manager (nvm) GitHub repo.
+    </p>
+    <p>
+      For Windows, follow <a href="https://github.com/coreybutler/nvm-windows#node-version-manager-nvm-for-windows">the installation and update instructions </a> in the <stache-code>README.md</stache-code> file for the Node Version Manager (nvm) for Windows GitHub repo. For additional guidance, see the tutorial below on how to upgrade to Node.js 10.15.1 with nvm for Windows.
     </p>
   </stache-page-summary>
 
   <stache-page-anchor>
-    Upgrading to Node 10.15.1 Using NVM for Windows
+    Upgrade to Node.js 10.15.1 with nvm for Windows
   </stache-page-anchor>
 
-  <p>
-    Prerequisites:
-  </p>
-  <ol>
+  <h3 class="sky-subsection-heading">
+    Prerequisites
+  </h3>
+
+  <ul>
     <li>
       7-Zip
     </li>
     <li>
-      Create a list of all globally installed NPM packages. (<stache-code>npm list -g --depth=0</stache-code>)
+      Run <stache-code>npm list -g --depth=0</stache-code> to create a list of all globally installed NPM packages.
     </li>
-  </ol>
+  </ul>
   <sky-alert alertType="warning">
-    If you have node installed, then all globally installed NPM packages will no longer be referenced unless you place that version of Node under NVM control (see below). (i.e., the global packages located in C:\Users\your_user_name>\AppData\Roaming\npm\node_modules)
+    If Node.js is already installed, then globally installed NPM packages are not referenced unless you place your version of Node.js under NVM control (see below). For examples, this includes global packages in <stache-code>C:\Users\[your_user_name]\AppData\Roaming\npm\node_modules</stache-code>.
   </sky-alert>
   <p>
-    For all new versions of Node under NVM control, then they will need to be re-installed.  The node_modules in this original directory is not removed and if you re-install Node.js in conjunction with NVM-managed-Node (not recommended), then it will continue to reference this folder.
+    You must re-install all new versions of Node.js under NVM control. The <stache-code>node_modules</stache-code> in the original directory is not removed, and if you re-install Node.js in conjunction with NVM-managed-Node (not recommended), then it continues to reference this folder.
   </p>
   <p>
-    If you do place a version of node under NVM control that references the global packages, and you uninstall that version of node and/or uninstall NVM, then it will also clean up the node_modules associated with that version of Node (edited)
+    If you place a version of Node.js under NVM control that references the global packages and also uninstall that version of Node.js or uninstall NVM, then it cleans up the <stache-code>node_modules</stache-code> associated with that version of Node.
   </p>
   <ol>
     <li>
-      Navigate to https://github.com/coreybutler/nvm-windows/releases and download `nvm-setup.zip`.  (`nvm-noinstall.zip` is used for a manual installation. See the https://github.com/coreybutler/nvm-windows/wiki for additional instructions.)
+      Navigate to https://github.com/coreybutler/nvm-windows/releases and download <stache-code>nvm-setup.zip</stache-code>. (For manual installation, use <stache-code>nvm-noinstall.zip</stache-code>. For additional instructions, see the https://github.com/coreybutler/nvm-windows/wiki.)
     </li>
     <li>
-      Extract `nvm-setup` from the Zip file
+      Extract <stache-code>nvm-setup</stache-code> from the Zip file.
     </li>
     <li>
-      Launch `nvm-setup.exe`
+      Launch <stache-code>nvm-setup.exe</stache-code>.
       <ol>
         <li>
-          Accept the License Agreement, then click *Next*
+          Accept the License Agreement and select <strong>Next</strong>.
         </li>
         <li>
-          Set the destination location.  NVM will try to install to a destination location of `C:\Users\<your_user_name>\AppData\Roaming\nvm` by default.  This will most likely fail with the error "An error occurred while trying to rename a file in the destination directory code.  MoveFile failed; code 5".  This means that the installation program does not have rights to rename a file in that folder.  *Use the location `C:\nvm`.*  Click *Next*.
+          Set the destination location and select <strong>Next</strong>. We recommend <stache-code>C:\nvm</stache-code>. By default, NVM installs to <stache-code>C:\Users\[your_user_name]\AppData\Roaming\nvm</stache-code>. This will most likely fail because the installer program does not have rights to rename a file in that folder.
         </li>
         <li>
-          Set the Node.js Symlink.  This should be `C:\program files\nodejs`.  If this folder exists NVM will try to overwrite what is already there.  Click *Next*.
+          Set the Node.js Symlink to <stache-code>C:\program files\nodejs</stache-code>. If this folder already exists, NVM attempts to overwrite it. Select <strong>Next</strong>.
         </li>
         <li>
-          Click *Install*.  If you have a version of node installed, then you will be prompted to allow NVM to control that version of Node.
+          Select <strong>Install</strong>. If a version of Node.js is installed, then you will be prompted to let NVM control that version.
         </li>
         <li>
-          Click *Finish*
+          Select <strong>Finish</strong>.
         </li>
       </ol>
     </li>
     <li>
-      *Restart your system* to ensure that the new environment variables take effect
+      To ensure that the new environment variables take effect, restart your machine.
     </li>
     <li>
-      *Open PowerShell as Administrator*.  At this point you may not have node installed
+      Open PowerShell as an administrator. At this point, Node.js may not be installed.
     </li>
     <li>
-      *Check environment variables.*  (`Get-ChildItem Env:` in Powershell)
-      <li>
-        User environment variables should have `NVM_HOME` and `NVM_SYMLINK`
-      </li>
-      <li>
-        User PATH environment variable should list `%NVM_HOME%` and `%NVM_SYMLINK%` (examine via `$Env:Path` in Powershell)
-      </li>
-    </li>
-    <li>
-      *Type `nvm`*.  This will dump the NVM help if it installed properly
-    </li>
-    <li>
-      *Type `nvm list`* to list all versions of Node under NVM control.  An asterisk (*) will be next to the currently used version of node.  *_To add/upgrade Node.js 10.15.1 and place it under NVM control, you will need to do the following:_*
-      <ol>
+      To check your environment variables, run <stache-code>Get-ChildItem Env:</stache-code> in Powershell.
+      <ul>
         <li>
-          *Type `nvm install` 10.15.1*
+          User environment variables should include <stache-code>NVM_HOME</stache-code> and <stache-code>NVM_SYMLINK</stache-code>.
         </li>
         <li>
-          *Type `nvm use 10.15.1`* (*Important!*  If you don't do this then you won't be using Node 10.15.1)
+          The user PATH environment variable should list <stache-code>%NVM_HOME%</stache-code> and <stache-code>%NVM_SYMLINK%</stache-code>. To examine the user PATH environment variable in Powershell, run <stache-code>$Env:Path</stache-code>.
         </li>
-      </ol>
+      </ul>
     </li>
     <li>
-      *Confirm the node version* by typing `node -v.`  It should return `10.15.1`
+      To dump the NVM help if it installed properly, run <stache-code>nvm</stache-code>.
     </li>
     <li>
-      *Confirm the NPM version* by typing `npm -v`.  It should return `6.4.1`
+      To list all versions of Node.js under NVM control, run <stache-code>nvm list</stache-code>. An asterisk appears next to the currently used version of Node.
     </li>
     <li>
-      *Determine if you have your globally installed NPM packages* (`npm list -g --depth=0`), and that your paths are set correctly (You can confirm this by just typing `skyux` and getting the help) .  At this point you may have no global NPM packages installed you will have to reinstall the ones that you use from the list you created as part of the pre-requisites.
+      To install or upgrade to Node.js 10.15.1 and place it under NVM control, run <stache-code>nvm install 10.15.1</stache-code>.
     </li>
     <li>
-      If the location of the `node_modules` for the global packages has changed, the *you may need to re-generate your `.npmrc`*
+      To designate Node.js version 10.15.1 as the version to use, run <stache-code>nvm use 10.15.1</stache-code>
     </li>
     <li>
-      (https://docs.blackbaud.com/engineering-system-docs/learn/dev-setup-engsys/vsts-npm-feed)
+      To confirm the Node.js version, run <stache-code>node -v.</stache-code> This should return <stache-code>10.15.1Node 10.15.1.
     </li>
     <li>
-      In the same Terminal, *run the following command*: `npm install --global --production windows-build-tools`
+      To confirm the NPM version, run <stache-code>npm -v</stache-code>. This should return <stache-code>6.4.1</stache-code>.
+    </li>
+    <li>
+      To confirm your globally installed NPM packages, run <stache-code>npm list -g --depth=0</stache-code>. And to confirm your paths are set correctly, run <stache-code>skyux</stache-code> and get the help. If global NPM packages from the list you created as part of the prerequisites are not installed, reinstall them.
+    </li>
+    <li>
+      If the location of the <stache-code>node_modules</stache-code> for the global packages changed, regenerate your <stache-code>.npmrc</stache-code>.
+    </li>
+    <li>
+      Configure your machine to use <a href="https://docs.blackbaud.com/engineering-system-docs/learn/dev-setup-engsys/vsts-npm-feed">the Blackbaud VSTS NPM feed</a>.
+    </li>
+    <li>
+      Run <stache-code>npm install --global --production windows-build-tools</stache-code>.
     </li>
    <li>
-      *Reboot* machine again
+      Reboot your machine again.
     </li>
    <li>
-      *Run* `rimraf node_modules` and then `npm install` again on any projects you haven't yet. When finished, you may notice a warning about vulnerabilities.  This is expected.
+      Run <stache-code>rimraf node_modules</stache-code> and then <stache-code>npm install</stache-code> on your projects. If a prompt warns about vulnerabilities, disregard it. This is expected.
     </li>
    </ol>
-
-*Note:* You will not be able to upgrade the NPM version by using the npm-windows-upgrade package when Node.js is under NVM control.  NVM upgrades NPM when Node is upgaded, so the versions are tied together.
-
+   <sky-alert alertType="info">
+     You cannot us the <stache-code>npm-windows-upgrade</stache-code> packagebe able to upgrade the NPM version when Node.js is under NVM control. NVM upgrades NPM when Node.js is upgraded, so the versions are tied together.
+   </sky-alert>
 
 </stache>
